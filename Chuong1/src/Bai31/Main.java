@@ -21,7 +21,7 @@ public class Main {
             do {
                 System.out.print("Chon chuc nang muon thuc hien: ");
                 chon = scanner.nextInt();
-            } while (chon < 0 || chon > 3);
+            } while (chon < 0 || chon > 4);
 
             switch (chon) {
                 case 0: {
