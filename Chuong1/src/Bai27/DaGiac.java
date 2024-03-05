@@ -65,7 +65,7 @@ public class DaGiac {
     }
     //tim diem xa goc toa do nhat
     public Dinh timDiemXaNhat() {
-        Dinh xa = this.getDsDinh().getFirst();
+        Dinh xa = this.getDsDinh().get(0);
         for (int i = 1; i < this.getSoDinh(); i++) {
             if (this.getDsDinh().get(i).tinhKhoangCachToiGocToaDo() > xa.tinhKhoangCachToiGocToaDo()) {
                 xa = this.getDsDinh().get(i);
