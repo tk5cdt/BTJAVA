@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<BDSs>
+    <BDS>
+        <Loai>1</Loai>
+        <MaSo>CTT001</MaSo>
+        <ChieuDai>10</ChieuDai>
+        <ChieuRong>5</ChieuRong>
+        <So>2</So>
+    </BDS>
+    <BDS>
+        <Loai>2</Loai>
+        <MaSo>CTT002</MaSo>
+        <ChieuDai>13</ChieuDai>
+        <ChieuRong>5</ChieuRong>
+    </BDS>
+    <BDS>
+        <Loai>3</Loai>
+        <MaSo>CTT003</MaSo>
+        <ChieuDai>20</ChieuDai>
+        <ChieuRong>10</ChieuRong>
+    </BDS>
+    <BDS>
+        <Loai>4</Loai>
+        <MaSo>CTT004</MaSo>
+        <ChieuDai>25</ChieuDai>
+        <ChieuRong>15</ChieuRong>
+        <So>4</So>
+    </BDS>
+</BDSs>

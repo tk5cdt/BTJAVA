@@ -1,4 +1,5 @@
 package Bai25;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
@@ -145,6 +146,18 @@ public class PhanSo {
 
     public PhanSo chia(int soNguyen) {
         return chia(new PhanSo(soNguyen, 1));
+    }
+
+    public int compareTo(PhanSo other) {
+        // Sử dụng công thức a/b - c/d = ad/bd - bc/bd = (ad - bc) / bd
+        int tu = this.tuSo * other.mauSo - this.mauSo * other.tuSo;
+        if (tu > 0) {
+            return 1;
+        } else if (tu < 0) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 
     public static void main(String[] args) {
