@@ -10,7 +10,7 @@ import java.util.Scanner;
  *
  * @author Administrator
  */
-public cBai06 {
+public class Bai06 {
 
     public static void main(String[] args) {
         int nam;

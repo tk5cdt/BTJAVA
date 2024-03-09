@@ -5,12 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c9b7d763-8d71-487d-8c99-e5e1d5d882cd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../Bai3/Bai3.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Bai3/src/Bai3.form" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Bai3/src/Bai3.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Bai7.form" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Bai7.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Bai7.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Bai5/src/DateFormat.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Bai5/src/ThongTin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Chuong1/src/Bai06.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Chuong1/src/Bai06.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Bai5/src/Bai5.form" beforeDir="false" afterPath="$PROJECT_DIR$/../Bai5/src/Bai5.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Bai5/src/Bai5.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Bai5/src/Bai5.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,9 +27,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 1
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="2dJAX1hOQ3eJOlWxYwZNKDfpA34" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -41,8 +40,10 @@
     "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH": "214",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/vothi/Documents/HK6/Java/bt/BTJAVA/Chuong2/Bai7",
     "onboarding.tips.debug.path": "E:/VCVCVCVCVCCVCVVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVC/JAVA_WEBFORM/eclipse/BTJAVA/Chuong2/Bai7/src/Main.java"
   }
 }]]></component>
