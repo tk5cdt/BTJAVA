@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -9,6 +10,7 @@ public class Bai8 {
     String fileName = "src/Bai8.txt";
     String[] columnNames = {"Code", "Name", "Salary"};
     Object[][] data;
+    DefaultTableModel model;
 
     boolean addNew = false;
     boolean changed = false;
@@ -28,7 +30,7 @@ public class Bai8 {
 
     public Bai8() {
         loadData();
-        table1 = new JTable(data, columnNames);
+        table1.setModel(model);
         jscltable.setViewportView(table1);
         btnNew.addActionListener(new ActionListener() {
             @Override
@@ -49,10 +51,12 @@ public class Bai8 {
                     File file = new File(fileName);
                     FileWriter fw = new FileWriter(file);
                     BufferedWriter bw = new BufferedWriter(fw);
-                    for (int i = 0; i < data.length; i++) {
-                        for (int j = 0; j < data[i].length; j++) {
-                            bw.write(data[i][j].toString());
-                            if (j < data[i].length - 1) {
+                    for (int i = 0; i < model.getRowCount(); i++) {
+                        for (int j = 0; j < model.getColumnCount(); j++) {
+//                            bw.write(data[i][j].toString());
+                            bw.write(model.getValueAt(i, j).toString());
+//                            if (j < data[i].length - 1) {
+                            if (j < model.getColumnCount() - 1) {
                                 bw.write(",");
                             }
                         }
@@ -73,29 +77,31 @@ public class Bai8 {
                 if (addNew) {
                     // Add new row
                     Object[] newRow = {txtCode.getText(), txtName.getText(), txtSalary.getText()};
-                    Object[][] newData = new Object[data.length + 1][3];
-                    for (int i = 0; i < data.length; i++) {
-                        for (int j = 0; j < data[i].length; j++) {
-                            newData[i][j] = data[i][j];
-                        }
-                    }
-                    newData[data.length] = newRow;
-                    data = newData;
+//                    Object[][] newData = new Object[data.length + 1][3];
+//                    for (int i = 0; i < data.length; i++) {
+//                        for (int j = 0; j < data[i].length; j++) {
+//                            newData[i][j] = data[i][j];
+//                        }
+//                    }
+//                    newData[data.length] = newRow;
+//                    data = newData;
                     addNew = false;
                     changed = true;
+                    model.addRow(newRow);
                 } else {
                     // Update row
                     int row = table1.getSelectedRow();
                     if (row == -1) {
                         return;
                     }
-                    data[row][0] = txtCode.getText();
-                    data[row][1] = txtName.getText();
-                    data[row][2] = txtSalary.getText();
+//                    data[row][0] = txtCode.getText();
+//                    data[row][1] = txtName.getText();
+//                    data[row][2] = txtSalary.getText();
                     changed = true;
+                    for (int i = 0; i < model.getColumnCount(); i++) {
+                        model.setValueAt(data[row][i], row, i);
+                    }
                 }
-                table1 = new JTable(data, columnNames);
-                jscltable.setViewportView(table1);
                 addNew = false;
             }
         });
@@ -119,8 +125,7 @@ public class Bai8 {
                     }
                 }
                 data = newData;
-                table1 = new JTable(data, columnNames);
-                jscltable.setViewportView(table1);
+                model.removeRow(row);
                 changed = true;
             }
         });
@@ -157,6 +162,9 @@ public class Bai8 {
                 String[] str = list.get(i).split(",");
                 data[i] = str;
             }
+            br.close();
+            fr.close();
+            model = new DefaultTableModel(data, columnNames);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
