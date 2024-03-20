@@ -16,10 +16,37 @@ public class Bai1 {
         btngiai.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                float a = Float.parseFloat(txtA.getText());
-                float b = Float.parseFloat(txtb.getText());
-                float kq = -b/a;
-                txtKQ.setText(kq + "");
+                String inA = txtA.getText().trim();
+                String inB = txtb.getText().trim();
+
+                if(inA.isEmpty() || inB.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Vui lòng nhập số a và số b");
+                    txtA.requestFocus();
+                    return;
+                }
+
+                if (!isNumeric(inA)) {
+                    JOptionPane.showMessageDialog(null, "Vui lòng nhập số a hợp lệ");
+                    txtA.requestFocus();
+                    return;
+                }
+
+                if (!isNumeric(inB)) {
+                    JOptionPane.showMessageDialog(null, "Vui lòng nhập số b hợp lệ");
+                    txtb.requestFocus();
+                    return;
+                }
+                float a = Float.parseFloat(inA);
+                float b = Float.parseFloat(inB);
+
+                if (a == 0) {
+                    JOptionPane.showMessageDialog(null, "Số a phải khác 0");
+                    txtA.requestFocus();
+                    return;
+                }
+
+                float kq = -b / a;
+                txtKQ.setText(Float.toString(kq));
             }
         });
 
@@ -37,6 +64,14 @@ public class Bai1 {
                 System.exit(0);
             }
         });
+    }
+    private boolean isNumeric(String str) {
+        try {
+            Float.parseFloat(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
     public static void main(String[] args)
     {

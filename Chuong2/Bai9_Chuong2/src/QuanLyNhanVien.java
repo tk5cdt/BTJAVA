@@ -102,7 +102,8 @@ public class QuanLyNhanVien extends JFrame {
                     Department newDept = new Department(code, name);
                     root.add(new DefaultMutableTreeNode(newDept));
                 } else {
-                    ((Department) curDepNode.getUserObject()).setDepCode(name);
+                    ((Department) curDepNode.getUserObject()).setDepCode(code);
+                    ((Department) curDepNode.getUserObject()).setDepName(name);
                 }
                 treeDpt.updateUI();
                 addNewDep = false;
@@ -141,6 +142,7 @@ public class QuanLyNhanVien extends JFrame {
                 String salary = txtSalary.getText().trim();
                 if (!isInteger(salary)) {
                     JOptionPane.showMessageDialog(null, "Lương không được phép là chữ");
+                    txtSalary.setText("");
                     txtSalary.requestFocus();
                     return;
                 }
@@ -149,6 +151,7 @@ public class QuanLyNhanVien extends JFrame {
                 int salaryValue = Integer.parseInt(salary);
                 if (salaryValue < 0) {
                     JOptionPane.showMessageDialog(null, "Lương không được âm");
+                    txtSalary.setText("");
                     txtSalary.requestFocus();
                     return;
                 }
