@@ -52,4 +52,5 @@ public class KhachHang {
         setSDT(sdt);
         setEmail(email);
     }
+
 }

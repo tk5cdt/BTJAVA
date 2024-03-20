@@ -1,10 +1,16 @@
 import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 public class Bai7 {
@@ -29,9 +35,9 @@ public class Bai7 {
     DefaultMutableTreeNode khachHangVip = new DefaultMutableTreeNode("Khách hàng VIP");
     DefaultMutableTreeNode khachHangTiemNang = new DefaultMutableTreeNode("Khách hàng tiềm năng");
     DefaultMutableTreeNode khachHangKhoTinh = new DefaultMutableTreeNode("Khách hàng khó tính");
+    List<KhachHang> KH = new ArrayList<KhachHang>();
     public void load()
     {
-
         congTy.add(khachHangVip);
         congTy.add(khachHangTiemNang);
         congTy.add(khachHangKhoTinh);
@@ -41,6 +47,10 @@ public class Bai7 {
         model = (DefaultTreeModel)tree1.getModel();
         model.setRoot(congTy);
         tree1.setModel(model);
+        for(int i = 0;i<tree1.getRowCount();i++)
+        {
+            tree1.expandRow(i);
+        }
 
     }
     public Bai7() {
@@ -57,6 +67,7 @@ public class Bai7 {
         btnSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 //table
                 KhachHang kh = new KhachHang();
                 kh.setMaKH(txtMaKH.getText());
@@ -65,13 +76,50 @@ public class Bai7 {
                 kh.setEmail(txtEmail.getText());
                 Nhap(kh);
                 dt.addRow(Vdong);
+                KH.add(kh);
                 table1.setModel(dt);
+                khachHangVip.removeAllChildren();
                 // tree
-                DefaultMutableTreeNode khtree = new DefaultMutableTreeNode(txtTenKH.getText());
-                khachHangVip.add(khtree);
+                for(KhachHang khs:KH)
+                {
+                    DefaultMutableTreeNode khtree = new DefaultMutableTreeNode(khs.getTenKH());
+
+
+                    khachHangVip.add(khtree);
+                }
+
                 load();
+                txtMaKH.setText("");
+                txtSDT.setText("");
+                txtTenKH.setText("");
+                txtEmail.setText("");
             }
 
+        });
+        btnDel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode) tree1.getSelectionPath().getLastPathComponent();
+                DefaultTreeModel model = (DefaultTreeModel) tree1.getModel();
+                if(selectNode!= tree1.getModel().getRoot())
+
+                    model.removeNodeFromParent(selectNode);
+            }
+        });
+        tree1.addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode) tree1.getLastSelectedPathComponent();
+                if(selectNode!=null)
+                {
+                    int n = khachHangVip.getIndex(selectNode);
+                    KhachHang kh = KH.get(n);
+                    txtMaKH.setText(kh.getMaKH());
+                    txtTenKH.setText(kh.getTenKH());
+                    txtSDT.setText(kh.getSDT());
+                    txtEmail.setText(kh.getEmail());
+                }
+            }
         });
     }
 
