@@ -44,6 +44,11 @@ public class Bai5 extends Component {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ghiFile(tt);
+                txtName.setText("");
+                txtDoB.setText("");
+                txtEmail.setText("");
+                rdMale.setSelected(true);
+                cboPro.setSelectedIndex(0);
                 txtName.requestFocus();
             }
         });
