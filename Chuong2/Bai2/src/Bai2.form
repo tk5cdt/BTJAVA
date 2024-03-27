@@ -101,6 +101,7 @@
         </constraints>
         <properties>
           <font name="Tahoma" size="20" style="1"/>
+          <foreground color="-1768192"/>
           <text value="GIẢI PHƯƠNG TRÌNH BẬC 2"/>
         </properties>
       </component>

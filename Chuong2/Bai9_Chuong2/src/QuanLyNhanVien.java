@@ -1,4 +1,3 @@
-import javax.management.ObjectName;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -6,7 +5,6 @@ import javax.swing.tree.TreePath;
 import java.awt.event.*;
 import java.io.*;
 import java.util.Enumeration;
-import java.util.Locale;
 import java.util.StringTokenizer;
 
 public class QuanLyNhanVien extends JFrame {
@@ -15,7 +13,7 @@ public class QuanLyNhanVien extends JFrame {
     private JTextField txtDeptName;
     private JTextField txtEmpCode;
     private JButton btnNewDPT;
-    private JButton btnRomveDPT;
+    private JButton btnRemoveDPT;
     private JButton btnSaveDPT;
     private JTextField txtEmpName;
     private JTextField txtSalary;
@@ -77,7 +75,7 @@ public class QuanLyNhanVien extends JFrame {
             }
         });
 
-        btnRomveDPT.addActionListener(new ActionListener() {
+        btnRemoveDPT.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (curDepNode.getChildCount() > 0) {
@@ -104,7 +102,8 @@ public class QuanLyNhanVien extends JFrame {
                     Department newDept = new Department(code, name);
                     root.add(new DefaultMutableTreeNode(newDept));
                 } else {
-                    ((Department) curDepNode.getUserObject()).setDepCode(name);
+                    ((Department) curDepNode.getUserObject()).setDepCode(code);
+                    ((Department) curDepNode.getUserObject()).setDepName(name);
                 }
                 treeDpt.updateUI();
                 addNewDep = false;
@@ -141,9 +140,25 @@ public class QuanLyNhanVien extends JFrame {
                 String name = txtEmpName.getText().trim();
                 txtEmpName.setText(name);
                 String salary = txtSalary.getText().trim();
+                if (!isInteger(salary)) {
+                    JOptionPane.showMessageDialog(null, "Lương không được phép là chữ");
+                    txtSalary.setText("");
+                    txtSalary.requestFocus();
+                    return;
+                }
+
+                // Tiếp tục xử lý khi chuỗi nhập vào là số nguyên
+                int salaryValue = Integer.parseInt(salary);
+                if (salaryValue < 0) {
+                    JOptionPane.showMessageDialog(null, "Lương không được âm");
+                    txtSalary.setText("");
+                    txtSalary.requestFocus();
+                    return;
+                }
                 txtSalary.setText(salary);
+
                 int sal = Integer.parseInt(salary);
-                if (!validEmpDetails()) return;
+
                 if (addNewEmp == true) {
                     Employee newEmp = new Employee(code, name, sal);
                     curDepNode.add(new DefaultMutableTreeNode(newEmp));
@@ -193,11 +208,14 @@ public class QuanLyNhanVien extends JFrame {
     private boolean validDepDetails() {
         return true;
     }
-
-    private boolean validEmpDetails() {
-        return true;
+    public static boolean isInteger(String input) {
+        try {
+            Integer.parseInt(input);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
-
     public static void main(String[] args) {
         JFrame frame = new JFrame("QuanLyNhanVien");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -240,7 +258,6 @@ public class QuanLyNhanVien extends JFrame {
         }
 
     }
-
     private void createUIComponents() {
         setUpTree();
     }
