@@ -1,15 +1,14 @@
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Bai8 {
     String fileName = "src/Bai8.txt";
-    String[] columnNames = {"Code", "Name", "Salary"};
-    Object[][] data;
     DefaultTableModel model;
 
     boolean addNew = false;
@@ -30,7 +29,14 @@ public class Bai8 {
 
     public Bai8() {
         loadData();
+        table1 = new JTable() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         table1.setModel(model);
+//        table1.setEnabled(false);
         jscltable.setViewportView(table1);
         btnNew.addActionListener(new ActionListener() {
             @Override
@@ -98,9 +104,9 @@ public class Bai8 {
 //                    data[row][1] = txtName.getText();
 //                    data[row][2] = txtSalary.getText();
                     changed = true;
-                    for (int i = 0; i < model.getColumnCount(); i++) {
-                        model.setValueAt(data[row][i], row, i);
-                    }
+                    model.setValueAt(txtCode.getText(), row, 0);
+                    model.setValueAt(txtName.getText(), row, 1);
+                    model.setValueAt(txtSalary.getText(), row, 2);
                 }
                 addNew = false;
             }
@@ -113,18 +119,18 @@ public class Bai8 {
                 if (row == -1) {
                     return;
                 }
-                Object[][] newData = new Object[data.length - 1][3];
-                for (int i = 0; i < row; i++) {
-                    for (int j = 0; j < data[i].length; j++) {
-                        newData[i][j] = data[i][j];
-                    }
-                }
-                for (int i = row + 1; i < data.length; i++) {
-                    for (int j = 0; j < data[i].length; j++) {
-                        newData[i - 1][j] = data[i][j];
-                    }
-                }
-                data = newData;
+//                Object[][] newData = new Object[data.length - 1][3];
+//                for (int i = 0; i < row; i++) {
+//                    for (int j = 0; j < data[i].length; j++) {
+//                        newData[i][j] = data[i][j];
+//                    }
+//                }
+//                for (int i = row + 1; i < data.length; i++) {
+//                    for (int j = 0; j < data[i].length; j++) {
+//                        newData[i - 1][j] = data[i][j];
+//                    }
+//                }
+//                data = newData;
                 model.removeRow(row);
                 changed = true;
             }
@@ -143,11 +149,29 @@ public class Bai8 {
                 System.exit(0);
             }
         });
+
+        table1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                addNew = false;
+                int row = table1.getSelectedRow();
+                if (row == -1) {
+                    return;
+                }
+                txtCode.setText(model.getValueAt(row, 0).toString());
+                txtName.setText(model.getValueAt(row, 1).toString());
+                txtSalary.setText(model.getValueAt(row, 2).toString());
+//                txtCode.setEditable(false);
+            }
+        });
     }
 
     private void loadData() {
         // Load data from file
         try {
+            String[] columnNames = {"Code", "Name", "Salary"};
+            Object[][] data;
+
             File file = new File(fileName);
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
@@ -156,8 +180,10 @@ public class Bai8 {
             while ((line = br.readLine()) != null) {
                 list.add(line);
             }
-            int n = list.get(0).split(" ").length;
+
+            int n = list.get(0).split(",").length;
             data = new Object[list.size()][n];
+
             for (int i = 0; i < list.size(); i++) {
                 String[] str = list.get(i).split(",");
                 data[i] = str;
