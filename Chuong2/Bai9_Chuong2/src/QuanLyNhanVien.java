@@ -211,6 +211,10 @@ public class QuanLyNhanVien extends JFrame {
     }
 
     private boolean validDepDetails() {
+        if(txtDeptCode.getText().isEmpty() || txtDeptName.getText().isEmpty())
+        {
+            return false;
+        }
         return true;
     }
     private boolean validEmpDetails() {
