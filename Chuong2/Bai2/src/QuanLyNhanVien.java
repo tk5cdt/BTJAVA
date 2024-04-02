@@ -140,11 +140,6 @@ public class QuanLyNhanVien extends JFrame {
                 String name = txtEmpName.getText().trim();
                 txtEmpName.setText(name);
                 String salary = txtSalary.getText().trim();
-                if(!validEmpDetails())
-                {
-                    JOptionPane.showMessageDialog(null, "Hãy nhập đầy đủ thông tin");
-                    return;
-                }
                 if (!isInteger(salary)) {
                     JOptionPane.showMessageDialog(null, "Lương không được phép là chữ");
                     txtSalary.setText("");
@@ -211,13 +206,6 @@ public class QuanLyNhanVien extends JFrame {
     }
 
     private boolean validDepDetails() {
-        return true;
-    }
-    private boolean validEmpDetails() {
-        if(txtEmpCode.getText().isEmpty() || txtEmpName.getText().isEmpty() || txtSalary.getText().isEmpty())
-        {
-            return false;
-        }
         return true;
     }
     public static boolean isInteger(String input) {
