@@ -4,6 +4,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.event.*;
 import java.io.*;
+import java.net.SocketOption;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 
@@ -265,6 +266,7 @@ public class QuanLyNhanVien extends JFrame {
                     int empSalary = Integer.parseInt(stk.nextToken().trim());
                     curEmpNode = new DefaultMutableTreeNode(new Employee(Code, Name, empSalary));
                     curDepNode.add(curEmpNode);
+
                 }
             }
             bf.close();
@@ -293,6 +295,5 @@ public class QuanLyNhanVien extends JFrame {
         this.txtEmpName.setText(curEmp != null ? curEmp.getEmpName() : "");
         this.txtSalary.setText("" + (curEmp != null ? curEmp.getEmpSalary() : ""));
     }
-
 
 }
