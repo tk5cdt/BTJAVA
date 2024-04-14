@@ -1,0 +1,133 @@
+﻿USE master;
+GO
+ALTER DATABASE QL_NHASACH 
+SET SINGLE_USER 
+WITH ROLLBACK IMMEDIATE;
+GO
+DROP DATABASE QL_NHASACH;
+
+CREATE DATABASE QL_NHASACH
+GO
+
+USE QL_NHASACH
+GO
+
+CREATE TABLE NGUOIDUNG
+(	
+	ND_ID INT IDENTITY,
+	TENDANGNHAP NVARCHAR(20),
+	MATKHAU NVARCHAR(45),
+	HOTEN NVARCHAR(225),
+	EMAIL NVARCHAR(45),
+	DIACHI NVARCHAR(225),
+	NGAYSINH DATE,
+	GIOITINH NVARCHAR(10),
+	CONSTRAINT PK_NGUOIDUNG PRIMARY KEY (ND_ID)
+);
+go
+
+CREATE TABLE LOAISACH
+(
+	LS_ID INT IDENTITY,
+	TEN NVARCHAR(100),
+	MOTA NVARCHAR(225),
+	CONSTRAINT PK_LOAISACH PRIMARY KEY (LS_ID)
+);
+go
+CREATE TABLE SACH
+(
+	S_ID INT IDENTITY,
+	TIEUDE NVARCHAR(225),
+	TACGIA NVARCHAR(225),
+	NAMXUATBAN INT,
+	THELOAI INT,
+	MOTA NVARCHAR(225),
+	XOA BIT,
+	CONSTRAINT PK_SACH PRIMARY KEY (S_ID),
+	CONSTRAINT FK_SACH_THELOAI FOREIGN KEY (THELOAI) REFERENCES LOAISACH(LS_ID)
+);
+go
+CREATE TABLE HOADON
+(
+	HD_ID INT IDENTITY,
+	NGAY DATE,
+	NHANVIEN NVARCHAR(225),
+	TENKHACHHANG NVARCHAR(225),
+	GHICHU NVARCHAR(225),
+	CONSTRAINT PK_HOADON PRIMARY KEY (HD_ID)
+);
+go
+CREATE TABLE CHITIETHOADON
+(
+	CTHD_ID INT IDENTITY,
+	IDHOADON INT,
+	IDSACH INT,
+	SOLUONG INT,
+	GIABAN FLOAT,
+	CONSTRAINT PK_CTHD PRIMARY KEY (CTHD_ID),
+	CONSTRAINT FK_CTHD_HD FOREIGN KEY (IDHOADON) REFERENCES HOADON(HD_ID),
+	CONSTRAINT FK_CTHD_SACH FOREIGN KEY (IDSACH) REFERENCES SACH(S_ID)
+);
+go
+CREATE TABLE PHIEUNHAPSACH
+(
+	PNS_ID INT IDENTITY,
+	GHICHU NVARCHAR(225),
+	NGAY DATE,
+	NHANVIEN NVARCHAR(225),
+	CONSTRAINT PK_PNS PRIMARY KEY (PNS_ID)
+);
+go
+CREATE TABLE CHITIETPHIEUNHAPSACH
+(
+	CTPNS_ID INT IDENTITY,
+	ID_PNS INT,
+	IDSACH INT,
+	SOLUONG INT,
+	DONGIA FLOAT,
+	CONSTRAINT PK_CTPNS PRIMARY KEY (CTPNS_ID),
+	CONSTRAINT FK_CTPNS_PNS FOREIGN KEY (ID_PNS) REFERENCES PHIEUNHAPSACH(PNS_ID),
+	CONSTRAINT FK_CTPNS_SACH FOREIGN KEY (IDSACH) REFERENCES SACH(S_ID)
+);
+go
+CREATE VIEW View_LS_ID_With_RowNum AS
+SELECT ROW_NUMBER() OVER (ORDER BY LS_ID) AS SoThuTu,
+       LS_ID,
+       TEN,
+       MOTA
+FROM LOAISACH;
+go
+INSERT INTO NGUOIDUNG (TENDANGNHAP, MATKHAU, HOTEN, EMAIL, DIACHI, NGAYSINH, GIOITINH)
+VALUES
+(N'ad', N'1', N'Nguyễn Văn A', 'nguoiA@example.com', N'Hà Nội', '1990-01-01', N'Nam'),
+(N'add', N'11', N'Nguyễn Văn B', 'nguoiB@example.com', N'Đà Nẵng', '1995-02-15', N'Nữ'),
+(N'q', N'q', 'nguoiC@example.com', NULL, NULL, NULL, NULL);
+
+INSERT INTO LOAISACH (TEN, MOTA)
+VALUES (N'Tiểu thuyết', N'Thể loại văn học kể về một câu chuyện hư cấu, thường dài và có nhiều nhân vật.'),
+(N'Khoa học kỹ thuật', N'Cung cấp kiến thức và thông tin về các lĩnh vực khoa học và kỹ thuật.'),
+(N'Lịch sử', N'Ghi lại các sự kiện và diễn biến trong quá khứ.');
+
+INSERT INTO SACH (TIEUDE, TACGIA, NAMXUATBAN, THELOAI, MOTA, XOA)
+VALUES (N'Moby Dick', N'Herman Melville', 1851, 1, N'Tiểu thuyết kinh điển về hành trình săn bắt cá voi trắng.', 0),
+(N'Tôi Tưởng Mình Biết Cả Thế Giới', N'Alice Munro', 2013, 3, N'Tuyển tập truyện ngắn đoạt giải Nobel Văn học.', 0),
+(N'Sapiens: Lược sử loài người', N'Yuval Noah Harari', 2014, 2, N'Khám phá lịch sử loài người từ thời kỳ đồ đá đến thế kỷ 21.', 0);
+
+INSERT INTO HOADON (NGAY, NHANVIEN, TENKHACHHANG, GHICHU)
+VALUES (N'2023-12-01', N'Nguyễn Văn A', N'Trần Thị B', N'Hóa đơn thanh toán cho sản phẩm X'),
+(N'2024-01-15', N'Lê Thị C', N'Phạm Văn D', N'Hóa đơn thanh toán dịch vụ Y'),
+(N'2024-02-22', N'Trần Văn E', N'Nguyễn Thị F', N'Hóa đơn thanh toán cho sản phẩm Z');
+
+INSERT INTO CHITIETHOADON (IDHOADON, IDSACH, SOLUONG, GIABAN)
+VALUES (1, 1, 2, 100.50),  -- Invoice 1, Book 2, Quantity 2, Price 100.50
+       (2, 2, 1, 200.25),  -- Invoice 2, Book 1, Quantity 1, Price 200.25
+       (3, 3, 3, 50.75);   -- Invoice 3, Book 3, Quantity 1, Price 50.75
+
+INSERT INTO PHIEUNHAPSACH (GHICHU, NGAY, NHANVIEN)
+VALUES (N'Nhập sách giáo khoa học kỳ 2', N'2024-04-10', N'Trần Thị M'),
+(N'Nhập truyện tranh mới', N'2024-04-11', N'Lê Văn N');
+
+INSERT INTO CHITIETPHIEUNHAPSACH (ID_PNS, IDSACH, SOLUONG, DONGIA)
+VALUES (1, 2, 10, 30.00),  -- Phieu Nhap Sach 1, Sach 2, So luong 10, Don gia 30.00
+       (2, 1, 15, 22.75),  -- Phieu Nhap Sach 2, Sach 1, So luong 15, Don gia 22.75
+       (2, 3, 8, 18.25);   -- Phieu Nhap Sach 2, Sach 3, So luong 8, Don gia 18.25
