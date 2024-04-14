@@ -54,6 +54,7 @@ CREATE TABLE HOADON
 	NHANVIEN NVARCHAR(225),
 	TENKHACHHANG NVARCHAR(225),
 	GHICHU NVARCHAR(225),
+	XOA bit,
 	CONSTRAINT PK_HOADON PRIMARY KEY (HD_ID)
 );
 go
@@ -75,6 +76,7 @@ CREATE TABLE PHIEUNHAPSACH
 	GHICHU NVARCHAR(225),
 	NGAY DATE,
 	NHANVIEN NVARCHAR(225),
+	XOA bit,
 	CONSTRAINT PK_PNS PRIMARY KEY (PNS_ID)
 );
 go
@@ -113,19 +115,19 @@ VALUES (N'Moby Dick', N'Herman Melville', 1851, 1, N'Tiểu thuyết kinh điể
 (N'Tôi Tưởng Mình Biết Cả Thế Giới', N'Alice Munro', 2013, 3, N'Tuyển tập truyện ngắn đoạt giải Nobel Văn học.', 0),
 (N'Sapiens: Lược sử loài người', N'Yuval Noah Harari', 2014, 2, N'Khám phá lịch sử loài người từ thời kỳ đồ đá đến thế kỷ 21.', 0);
 
-INSERT INTO HOADON (NGAY, NHANVIEN, TENKHACHHANG, GHICHU)
-VALUES (N'2023-12-01', N'Nguyễn Văn A', N'Trần Thị B', N'Hóa đơn thanh toán cho sản phẩm X'),
-(N'2024-01-15', N'Lê Thị C', N'Phạm Văn D', N'Hóa đơn thanh toán dịch vụ Y'),
-(N'2024-02-22', N'Trần Văn E', N'Nguyễn Thị F', N'Hóa đơn thanh toán cho sản phẩm Z');
+INSERT INTO HOADON (NGAY, NHANVIEN, TENKHACHHANG, GHICHU, XOA)
+VALUES (N'2023-12-01', N'Nguyễn Văn A', N'Trần Thị B', N'Hóa đơn thanh toán cho sản phẩm X', 0),
+(N'2024-01-15', N'Lê Thị C', N'Phạm Văn D', N'Hóa đơn thanh toán dịch vụ Y', 0),
+(N'2024-02-22', N'Trần Văn E', N'Nguyễn Thị F', N'Hóa đơn thanh toán cho sản phẩm Z', 0);
 
 INSERT INTO CHITIETHOADON (IDHOADON, IDSACH, SOLUONG, GIABAN)
 VALUES (1, 1, 2, 100.50),  -- Invoice 1, Book 2, Quantity 2, Price 100.50
        (2, 2, 1, 200.25),  -- Invoice 2, Book 1, Quantity 1, Price 200.25
        (3, 3, 3, 50.75);   -- Invoice 3, Book 3, Quantity 1, Price 50.75
 
-INSERT INTO PHIEUNHAPSACH (GHICHU, NGAY, NHANVIEN)
-VALUES (N'Nhập sách giáo khoa học kỳ 2', N'2024-04-10', N'Trần Thị M'),
-(N'Nhập truyện tranh mới', N'2024-04-11', N'Lê Văn N');
+INSERT INTO PHIEUNHAPSACH (GHICHU, NGAY, NHANVIEN, XOA)
+VALUES (N'Nhập sách giáo khoa học kỳ 2', N'2024-04-10', N'Trần Thị M', 0),
+(N'Nhập truyện tranh mới', N'2024-04-11', N'Lê Văn N', 0);
 
 INSERT INTO CHITIETPHIEUNHAPSACH (ID_PNS, IDSACH, SOLUONG, DONGIA)
 VALUES (1, 2, 10, 30.00),  -- Phieu Nhap Sach 1, Sach 2, So luong 10, Don gia 30.00
