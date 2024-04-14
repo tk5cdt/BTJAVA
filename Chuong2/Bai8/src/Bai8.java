@@ -106,7 +106,7 @@ public class Bai8 {
                 int row = table1.getSelectedRow();
                 if (row == -1) {
                     return;
-                }
+                }int
                 Object[][] newData = new Object[data.length - 1][3];
                 for (int i = 0; i < row; i++) {
                     for (int j = 0; j < data[i].length; j++) {

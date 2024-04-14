@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 public class Bai6 extends JFrame
 {
 
-    String fileName = "C:\\Users\\vuthi\\OneDrive\\Desktop\\BTJAVA\\Chuong2\\Bai6\\src\\Bai6.txt";
+    String fileName = "C:\\Users\\vothi\\Documents\\HK6\\Java\\BTJAVA\\Chuong2\\Bai6\\src\\Bai6.txt";
 
     boolean addNew = false;
     boolean changed = false;

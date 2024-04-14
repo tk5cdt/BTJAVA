@@ -1,0 +1,7 @@
+PhongBan, A01, Phòng Kỹ Thuật
+PhongBan, A02, Phòng Kế Toán
+PhongBan, A03, Phòng Kinh Doanh
+NhanVien, A01, nv2, Trần Văn B, 16/11/2003, 02/07/2024
+NhanVien, A02, nv3, La Hán C, 11/07/2002, 16/09/2020
+NhanVien, A03, nv4, Vũ Thiện, 30/12/1969, 07/05/1954
+NhanVien, A01, nv5, Văn Tèo, 30/02/2000, 17/03/2023
