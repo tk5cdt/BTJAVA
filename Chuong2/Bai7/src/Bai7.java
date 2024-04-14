@@ -100,10 +100,16 @@ public class Bai7 {
             @Override
             public void actionPerformed(ActionEvent e) {
                 DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode) tree1.getSelectionPath().getLastPathComponent();
+                int n = khachHangVip.getIndex(selectNode);
                 DefaultTreeModel model = (DefaultTreeModel) tree1.getModel();
                 if(selectNode!= tree1.getModel().getRoot())
 
                     model.removeNodeFromParent(selectNode);
+                dt.removeRow(n);
+                txtMaKH.setText("");
+                txtSDT.setText("");
+                txtTenKH.setText("");
+                txtEmail.setText("");
             }
         });
         tree1.addTreeSelectionListener(new TreeSelectionListener() {
