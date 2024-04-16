@@ -1,12 +1,15 @@
 package GUI;
 
 import DAO.DBConnect;
-import POJO.TheLoai;
+import DAO.LoaiSachDAO;
+import DAO.SachDAO;
+import POJO.LoaiSach;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
 import java.sql.*;
+import java.util.List;
 import java.util.Vector;
 
 public class frmSach extends JDialog {
@@ -25,6 +28,8 @@ public class frmSach extends JDialog {
     private JButton buttonOK;
     private JButton buttonCancel;
 
+    DefaultComboBoxModel<LoaiSach> model;
+
     int id;
     Connection conn;
 
@@ -33,9 +38,7 @@ public class frmSach extends JDialog {
         btnSua.setVisible(false);
         btnXoa.setVisible(false);
         try {
-            ResultSet rs = null;
-            String sql = "select S_ID,TIEUDE,TACGIA,NAMXUATBAN,ls.TEN,s.MOTA from SACH s join LOAISACH ls on s.TheLoai = ls.LS_ID and XOA = 0";
-            rs = DBConnect.getInstance().executeQuery(sql);
+            ResultSet rs = SachDAO.instance.getSach();
 
             // đọc dữ liệu
             DefaultTableModel dtm = new DefaultTableModel();
@@ -66,14 +69,12 @@ public class frmSach extends JDialog {
     public void cbbLoad()
     {
         try {
-            ResultSet rs = null;
-            String sql1 = "select LS_ID, TEN from LOAISACH";
-            rs = DBConnect.getInstance().executeQuery(sql1);
-            while (rs.next())
-            {
-                TheLoai tl = new TheLoai(rs.getInt("LS_ID"), rs.getString("TEN"));
-                cbbTheLoai.addItem(tl);
+            List<LoaiSach> loaiSaches = LoaiSachDAO.instance.getAll();
+            model = new DefaultComboBoxModel<>();
+            for (LoaiSach ls : loaiSaches) {
+                model.addElement(ls);
             }
+            cbbTheLoai.setModel(model);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -88,23 +89,16 @@ public class frmSach extends JDialog {
         txtMoTa.setText("");
     }
 
-    public  int viTriCuaData(int idData)
+    public int viTriCuaData(int idData)
     {
-        int vt;
         try {
-            String q = "select * from View_LS_ID_With_RowNum where LS_ID = "+idData+"";
-            ResultSet rs = DBConnect.getInstance().executeQuery(q);
-            while (rs.next())
-            {
-                vt = rs.getInt("SoThuTu");
-                return vt;
-            }
+            return LoaiSachDAO.instance.getRowNum(idData);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return 0;
     }
     public frmSach() {
+        setTitle("Quản lý sách");
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -136,32 +130,29 @@ public class frmSach extends JDialog {
                         JOptionPane.showMessageDialog(btnThem,"Chưa nhập thông tin");
                     else
                     {
-                        StringBuffer sb = new StringBuffer();
-                        String qCheck = "select TIEUDE from SACH where TIEUDE = N'"+txtTieuDe.getText()+"' and XOA = 0";
-                        ResultSet rs = DBConnect.getInstance().executeQuery(qCheck);
-                        if(rs.next())
-                        {
-                            JOptionPane.showMessageDialog(btnThem,"Sách này đã tồn tại");
-                        }
-                        else
-                        {
+//                        StringBuffer sb = new StringBuffer();
+//                        ResultSet rs = SachDAO.instance.timKiemSach(txtTieuDe.getText());
+//                        if(rs.next())
+//                        {
+//                            JOptionPane.showMessageDialog(btnThem,"Sách này đã tồn tại");
+//                        }
+//                        else
+//                        {
                             try {
                                 Integer.parseInt(txtNamXB.getText());
                             } catch (NumberFormatException ex) {
                                 JOptionPane.showMessageDialog(table1,"Bạn cần nhập số");
                                 txtNamXB.setText("");
                             }
-                            String q = "INSERT INTO SACH (TIEUDE, TACGIA, NAMXUATBAN, TheLoai, MOTA, XOA)\n" +
-                                    "VALUES (N'"+txtTieuDe.getText()+"', N'"+txtTacGia.getText()+"', "+txtNamXB.getText()+", "+((TheLoai)cbbTheLoai.getSelectedItem()).getId()+
-                                    ", N'"+txtMoTa.getText()+"', 0)";
-                            int kq = DBConnect.getInstance().executeUpdate(q);
+                            int kq = SachDAO.instance.themSach(txtTieuDe.getText(),txtTacGia.getText(),txtNamXB.getText(),((LoaiSach)cbbTheLoai.getSelectedItem()).getId()+"",txtMoTa.getText());
                             if(kq>0)
                             {
                                 JOptionPane.showMessageDialog(table1,"Thêm mới thành công");
                                 frmLoad();
                                 cleanData();
+                                cbbLoad();
                             }
-                        }
+//                        }
                     }
                 }
                 catch (Exception ex)
@@ -182,14 +173,11 @@ public class frmSach extends JDialog {
                 // biến lấy id của thể loại
                 int idTL;
                 String tenTL = table1.getValueAt(row,4).toString();
-                String q = "select LS_ID from LOAISACH where TEN = N'"+tenTL+"'";
-                TheLoai TL;
                 try {
-                    ResultSet rs = DBConnect.getInstance().executeQuery(q);
-                    while (rs.next())
+                    LoaiSach loaiSach = LoaiSachDAO.instance.search(tenTL);
+                    if (loaiSach != null)
                     {
-                        idTL = rs.getInt("LS_ID");
-                        TL=new TheLoai(idTL,tenTL);
+                        idTL = loaiSach.getId();
                         cbbTheLoai.setSelectedIndex(viTriCuaData(idTL)-1);
                     }
                 }
@@ -216,27 +204,13 @@ public class frmSach extends JDialog {
                     else
                     {
                         StringBuffer sb = new StringBuffer();
-                        String qCheck = "select TIEUDE from SACH where TIEUDE=N'"+txtTieuDe.getText()+"' and S_ID != "+id+" and XOA = 0";
-                        Statement st = conn.createStatement();
-                        ResultSet rs = st.executeQuery(qCheck);
-                        if(rs.next())
+                        int kq = SachDAO.instance.suaSach(id+"", txtTieuDe.getText(), txtTacGia.getText(), txtNamXB.getText(),((LoaiSach)cbbTheLoai.getSelectedItem()).getId()+"",txtMoTa.getText());
+                        if(kq>0)
                         {
-                            JOptionPane.showMessageDialog(btnThem,"Sách này đã tồn tại");
-                        }
-                        else
-                        {
-                            String q = "UPDATE SACH " +
-                                    "SET TIEUDE = N'"+txtTieuDe.getText()+"',TACGIA = N'"+txtTacGia.getText()+"',NAMXUATBAN = "+txtNamXB.getText()+",TheLoai = "+
-                                    ((TheLoai)cbbTheLoai.getSelectedItem()).getId()+", MOTA = N'"+txtMoTa.getText()+"' " +
-                                    "WHERE S_ID = "+id+"";
-                            st = conn.createStatement();
-                            int kq = st.executeUpdate(q);
-                            if(kq>0)
-                            {
-                                JOptionPane.showMessageDialog(table1,"Sửa thành công");
-                                frmLoad();
-                                cleanData();
-                            }
+                            JOptionPane.showMessageDialog(table1,"Sửa thành công");
+                            frmLoad();
+                            cleanData();
+                            cbbLoad();
                         }
                     }
                 }
@@ -250,14 +224,22 @@ public class frmSach extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    String q = "UPDATE SACH SET XOA = 1 WHERE S_ID = "+id+"";
-                    int kq;
-                    kq = DBConnect.getInstance().executeUpdate(q);
-                    if(kq > 0)
-                    {
-                        JOptionPane.showMessageDialog(table1,"Xoá thành công");
-                        frmLoad();
-                        cleanData();
+                    int row = table1.getSelectedRow();
+                    id = (int)table1.getModel().getValueAt(row,0);
+                    if (row == -1) {
+                        JOptionPane.showMessageDialog(table1, "Chưa chọn dữ liệu cần xóa");
+                    }
+                    else if (JOptionPane.showConfirmDialog(table1, "Bạn có chắc chắn muốn xóa không?", "Xác nhận", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+                        return;
+                    }
+                    else {
+                        int kq = SachDAO.instance.xoaSach(id + "");
+                        if (kq > 0) {
+                            JOptionPane.showMessageDialog(table1, "Xoá thành công");
+                            frmLoad();
+                            cleanData();
+                            cbbLoad();
+                        }
                     }
                 }
                 catch (Exception ex)

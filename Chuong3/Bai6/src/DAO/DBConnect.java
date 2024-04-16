@@ -40,9 +40,7 @@ public class DBConnect {
             String connectionUrl = "jdbc:sqlserver://"+server+":"+port+";databaseName="+dbName+";;encrypt=true;trustServerCertificate=true;";
             con = DriverManager.getConnection(connectionUrl, username, password);
             System.out.println("Connect successfully");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
     }
@@ -69,10 +67,9 @@ public class DBConnect {
 
     public int executeUpdate(String sql) throws SQLException {
         try {
-            con.createStatement().executeUpdate(sql);
+            return con.createStatement().executeUpdate(sql);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return 0;
     }
 }

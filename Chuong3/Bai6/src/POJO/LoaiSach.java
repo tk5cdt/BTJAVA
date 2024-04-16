@@ -1,12 +1,15 @@
 package POJO;
 
-public class TheLoai {
+public class LoaiSach {
     int id;
     String ten;
 
-    public TheLoai(int id, String ten) {
+    String moTa;
+
+    public LoaiSach(int id, String ten, String moTa) {
         this.id = id;
         this.ten = ten;
+        this.moTa = moTa;
     }
 
     public int getId() {
@@ -28,5 +31,13 @@ public class TheLoai {
     @Override
     public String toString() {
         return ten;
+    }
+
+    public String getMoTa() {
+        return moTa;
+    }
+
+    public void setMoTa(String moTa) {
+        this.moTa = moTa;
     }
 }

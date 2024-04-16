@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.sql.*;
 
 import DAO.DBConnect;
+import DAO.DangNhapDAO;
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 
@@ -24,6 +25,12 @@ public class frmDangNhap extends JDialog {
     private String strTenDangNhap;
     private String strMatKhau;
     private String strTenNguoiDung;
+    private String idNguoiDung;
+
+    public String getIdNguoiDung() {
+        return idNguoiDung;
+    }
+
     private Boolean bKetQuaDangNhap;
 
     public String getStrMatKhau()
@@ -42,6 +49,7 @@ public class frmDangNhap extends JDialog {
     }
 
     public frmDangNhap() {
+        setTitle("Đăng nhập");
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(btnDangNhap);
@@ -76,36 +84,27 @@ public class frmDangNhap extends JDialog {
 
     private void onOK() {
         // add your code here
-        ResultSet rs = null;
         if (txtTenDangNhap.getText().isEmpty() || txtMatKhau.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!");
             return;
         }
         try {
-            String sql = "select * from NGUOIDUNG where "
-                    + "TENDANGNHAP = N'"+ txtTenDangNhap.getText() +"'"
-                    +"and MATKHAU = N'"+ txtMatKhau.getText() +"'";
-            rs = DBConnect.getInstance().executeQuery(sql);
-
-            while (rs.next())
-            {
-                strTenDangNhap = rs.getString("TENDANGNHAP");
-                strMatKhau = rs.getString("MATKHAU");
+            ResultSet rs = DangNhapDAO.instance.login(txtTenDangNhap.getText(), txtMatKhau.getText());
+            rs.next();
+            if(rs.getRow() > 0) {
                 strTenNguoiDung = rs.getString("HOTEN");
+                strMatKhau = rs.getString("MATKHAU");
+                idNguoiDung = rs.getString("ND_ID");
                 bKetQuaDangNhap = true;
-            }
-            if(bKetQuaDangNhap)
-            {
                 this.setVisible(false);
             }
-            else
-            {
+            else {
                 JOptionPane.showMessageDialog(this,"tên đăng nhập hoặc mật khẩu không chính xác!");
             }
         }
         catch (Exception e)
         {
-            System.out.print(getKetQuaDangNhap());
+            System.out.print(e);
             //JOptionPane.showMessageDialog(this,e.getMessage());
         }
         dispose();

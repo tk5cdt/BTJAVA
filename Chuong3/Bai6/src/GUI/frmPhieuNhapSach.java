@@ -1,6 +1,7 @@
 package GUI;
 
 import DAO.DBConnect;
+import DAO.PhieuNhapDAO;
 import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
@@ -32,6 +33,9 @@ public class frmPhieuNhapSach extends JDialog {
     private JButton buttonOK;
     private int id;
 
+    private String tenNV;
+    private String idNV;
+
     JDateChooser dateChooser = new JDateChooser();
 
 
@@ -43,10 +47,7 @@ public class frmPhieuNhapSach extends JDialog {
         btnSua.setVisible(false);
         btnXoa.setVisible(false);
         try {
-            ResultSet rs = null;
-            String sql = "select * from PHIEUNHAPSACH where XOA = 0";
-            rs = DBConnect.getInstance().executeQuery(sql);
-
+            ResultSet rs = PhieuNhapDAO.instance.getPhieuNhap();
             // đọc dữ liệu
             DefaultTableModel dtm = new DefaultTableModel();
             dtm.addColumn("Mã phiếu");
@@ -80,20 +81,24 @@ public class frmPhieuNhapSach extends JDialog {
 
     public void chiTietPhieuNhap(int idpn)
     {
-        String q = "select TIEUDE, SOLUONG, DONGIA from CHITIETPHIEUNHAPSACH c join SACH s on c.IDSACH = s.S_ID and c.CTPNS_ID ="+idpn+"";
         try {
-            ResultSet rs = DBConnect.getInstance().executeQuery(q);
+            ResultSet rs = PhieuNhapDAO.instance.getPhieuNhapTheoMa(String.valueOf(idpn));
+            StringBuffer sb = new StringBuffer();
             while (rs.next())
             {
-                //System.out.println("Tên sách: "+rs.getString("0")+"\nSố lượng: "+rs.getInt("SOLUONG")+"\nGía bán: "+rs.getFloat("GIABAN")+"");
-                JOptionPane.showMessageDialog(table1,"Chi tiết phiếu nhập sách:\nTên sách: "+rs.getString("TIEUDE")+"\nSố lượng: "+rs.getInt("SOLUONG")+"\nĐơn giá: "+rs.getFloat("DONGIA")+"");
+                sb.append("Tên sách: "+rs.getString("TIEUDE")+"\nSố lượng: "+rs.getInt("SOLUONG")+"\nGiá nhập: "+rs.getInt("DONGIA")+"\n\n");
             }
+            JOptionPane.showMessageDialog(table1,sb.toString(), "Chi tiết phiếu nhập", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public frmPhieuNhapSach() {
+    public frmPhieuNhapSach(String tenNV, String idNV) {
+        this.tenNV = tenNV;
+        this.idNV = idNV;
+        setTitle("Phiếu nhập sách");
+        txtNhanVien.setText(tenNV);
         dateChooser.setDateFormatString("dd-MM-yyyy");
         JNgay.add(dateChooser);
         setContentPane(contentPane);
@@ -111,9 +116,7 @@ public class frmPhieuNhapSach extends JDialog {
                     {
                         SimpleDateFormat dcn = new SimpleDateFormat("yyyy-MM-dd");
                         String date = dcn.format(dateChooser.getDate());
-                        String q = "INSERT INTO PHIEUNHAPSACH (GHICHU, NGAY, NHANVIEN, XOA)\n" +
-                                "VALUES (N'"+txtGhiChu.getText()+"', '"+date+"', N'"+txtNhanVien.getText()+"', 0)";
-                        int kq = DBConnect.getInstance().executeUpdate(q);
+                        int kq = PhieuNhapDAO.instance.themPhieuNhap(date,txtNhanVien.getText(),txtGhiChu.getText());
                         if(kq>0)
                         {
                             JOptionPane.showMessageDialog(table1,"Thêm mới thành công");
@@ -136,21 +139,6 @@ public class frmPhieuNhapSach extends JDialog {
                 btnXoa.setVisible(true);
                 int row = table1.getSelectedRow();
                 int column = table1.getSelectedColumn();
-                // biến lấy id của thể loại
-                int idHD;
-                String q = "select PNS_ID from PHIEUNHAPSACH where PNS_ID = "+id+"";
-                try {
-                    ResultSet rs = DBConnect.getInstance().executeQuery(q);
-//                    while (rs.next())
-//                    {
-//                        idHD = rs.getInt("HD_ID");
-//                        //chiTietHoaDon(idHD);
-//                    }
-                }
-                catch (SQLException ex)
-                {
-                    throw new RuntimeException(ex);
-                }
                 id = (int)table1.getModel().getValueAt(row,0);
                 chiTietPhieuNhap(id);
                 String day = table1.getModel().getValueAt(row,1).toString();
@@ -172,13 +160,10 @@ public class frmPhieuNhapSach extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 SimpleDateFormat dcn = new SimpleDateFormat("yyyy-MM-dd");
                 String date = dcn.format(dateChooser.getDate());
-                String q = "UPDATE PHIEUNHAPSACH SET NGAY = '"+date+"', NHANVIEN = N'"+txtNhanVien.getText()+
-                        "', GHICHU = N'"+txtGhiChu.getText()+"'" +
-                        "WHERE PNS_ID = "+id+"";
                 try {
-                    int kq = DBConnect.getInstance().executeUpdate(q);
+                    int kq = PhieuNhapDAO.instance.suaPhieuNhap(String.valueOf(id),date,txtNhanVien.getText(),txtGhiChu.getText());
                     if(kq > 0)
-                        JOptionPane.showMessageDialog(table1,"Sửa thành công");
+                        JOptionPane.showMessageDialog(table1,"Sửa thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -190,14 +175,21 @@ public class frmPhieuNhapSach extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    String q = "UPDATE PHIEUNHAPSACH SET XOA = 1 WHERE PNS_ID = "+id+"";
-                    int kq;
-                    kq = DBConnect.getInstance().executeUpdate(q);
-                    if(kq > 0)
-                    {
-                        JOptionPane.showMessageDialog(table1,"Xoá thành công");
-                        frmLoad();
-                        cleanData();
+                    int row = table1.getSelectedRow();
+                    id = (int)table1.getModel().getValueAt(row,0);
+                    if (row == -1) {
+                        JOptionPane.showMessageDialog(table1, "Chưa chọn dữ liệu cần xóa");
+                    }
+                    else if (JOptionPane.showConfirmDialog(table1, "Bạn có chắc chắn muốn xóa không?", "Xác nhận", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+                        return;
+                    }
+                    else {
+                        int kq = PhieuNhapDAO.instance.xoaPhieuNhap(String.valueOf(id));
+                        if (kq > 0) {
+                            JOptionPane.showMessageDialog(table1, "Xoá thành công");
+                            frmLoad();
+                            cleanData();
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -215,7 +207,7 @@ public class frmPhieuNhapSach extends JDialog {
     }
 
     public static void main(String[] args) {
-        frmPhieuNhapSach dialog = new frmPhieuNhapSach();
+        frmPhieuNhapSach dialog = new frmPhieuNhapSach("", "");
         dialog.setLocationRelativeTo(null);
         dialog.pack();
         dialog.setVisible(true);

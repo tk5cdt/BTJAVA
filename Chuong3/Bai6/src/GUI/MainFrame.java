@@ -19,6 +19,7 @@ public class MainFrame {
     private JPanel pnContent;
 
     public String tenNV;
+    public String idNV;
 
     public MainFrame() {
         this.mnuDangXuat.setEnabled(false);
@@ -28,12 +29,9 @@ public class MainFrame {
         this.mnuPhieuNhapSach.setEnabled(false);
         frmDangNhap frmDN = new frmDangNhap();
         frmLoaiSach frmLS = new frmLoaiSach();
-        frmSach frmS = new frmSach();
-        frmPhieuNhapSach frmPNS = new frmPhieuNhapSach();
-        frmPNS.pack();
+
         frmDN.pack();
         frmLS.pack();
-        frmS.pack();
         mnuDangNhap.addActionListener(new ActionListener()
         {
             @Override
@@ -42,6 +40,7 @@ public class MainFrame {
                 frmDN.setLocationRelativeTo(null);
                 frmDN.setVisible(true);
                 tenNV = frmDN.getStrTenNguoiDung();
+                idNV = frmDN.getIdNguoiDung();
                 if(frmDN.getKetQuaDangNhap())
                 {
                     mnuHoaDon.setEnabled(true);
@@ -74,6 +73,8 @@ public class MainFrame {
         mnuSach.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                frmSach frmS = new frmSach();
+                frmS.pack();
                 frmS.setLocationRelativeTo(null);
                 frmS.setVisible(true);
             }
@@ -81,7 +82,7 @@ public class MainFrame {
         mnuHoaDon.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frmHoaDon frmHD = new frmHoaDon(tenNV);
+                frmHoaDon frmHD = new frmHoaDon(tenNV, idNV);
                 frmHD.pack();
                 frmHD.setLocationRelativeTo(null);
                 frmHD.setVisible(true);
@@ -90,6 +91,8 @@ public class MainFrame {
         mnuPhieuNhapSach.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                frmPhieuNhapSach frmPNS = new frmPhieuNhapSach(tenNV, idNV);
+                frmPNS.pack();
                 frmPNS.setLocationRelativeTo(null);
                 frmPNS.setVisible(true);
             }

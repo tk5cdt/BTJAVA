@@ -1,11 +1,14 @@
 package GUI;
 
 import DAO.DBConnect;
+import DAO.LoaiSachDAO;
+import POJO.LoaiSach;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
 import java.sql.*;
+import java.util.List;
 import java.util.Vector;
 
 public class frmLoaiSach extends JDialog {
@@ -28,21 +31,19 @@ public class frmLoaiSach extends JDialog {
         btnSua.setVisible(false);
         btnXoa.setVisible(false);
         try {
-            ResultSet rs = null;
-            String sql = "select * from LOAISACH";
-            rs = DBConnect.getInstance().executeQuery(sql);
+            List<LoaiSach> loaiSaches = LoaiSachDAO.instance.getAll();
 
             // đọc dữ liệu
             DefaultTableModel dtm = new DefaultTableModel();
             dtm.addColumn("Mã sách");
             dtm.addColumn("Thể loại");
             dtm.addColumn("Mô tả");
-            while (rs.next()) {
-                Vector vt = new Vector();
-                vt.add(rs.getInt("LS_ID"));
-                vt.add(rs.getString("TEN"));
-                vt.add(rs.getString("MOTA"));
-                dtm.addRow(vt);
+            for (LoaiSach loaiSach : loaiSaches) {
+                Vector<Object> vec = new Vector<>();
+                vec.add(loaiSach.getId());
+                vec.add(loaiSach.getTen());
+                vec.add(loaiSach.getMoTa());
+                dtm.addRow(vec);
             }
             this.table1.setModel(dtm);
         }
@@ -81,24 +82,22 @@ public class frmLoaiSach extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 try {
                     if(txtTenSach.getText().equals("") || txtMoTa.getText().equals(""))
-                        JOptionPane.showMessageDialog(btnThem,"Chưa nhập thông tin");
+                        JOptionPane.showMessageDialog(table1,"Chưa nhập thông tin");
                     else
                     {
                         StringBuffer sb = new StringBuffer();
-                        String qCheck = "select TEN from LOAISACH where TEN=N'"+txtTenSach.getText()+"'";
-                        ResultSet rs = DBConnect.getInstance().executeQuery(qCheck);
-                        if(rs.next())
+                        LoaiSach ls = LoaiSachDAO.instance.search(txtTenSach.getText());
+                        if(ls != null)
                         {
                             sb.append("Loại sách này đã tồn tại");
                         }
                         if(sb.length()>0)
                         {
-                            JOptionPane.showMessageDialog(btnThem,sb.toString());
+                            JOptionPane.showMessageDialog(table1,sb.toString());
                         }
                         else
                         {
-                            String q = "insert into LOAISACH values (N'"+txtTenSach.getText()+"',N'"+txtMoTa.getText()+"')";
-                            int kq = DBConnect.getInstance().executeUpdate(q);
+                            int kq = LoaiSachDAO.instance.add(new LoaiSach(0, txtTenSach.getText(), txtMoTa.getText()));
                             if(kq>0)
                             {
                                 JOptionPane.showMessageDialog(table1,"Thêm mới thành công");
@@ -125,9 +124,7 @@ public class frmLoaiSach extends JDialog {
                     else
                     {
                         StringBuffer sb = new StringBuffer();
-                        String qCheck = "select TEN from LOAISACH where TEN=N'"+txtTenSach.getText()+"'";
-                        ResultSet rs = DBConnect.getInstance().executeQuery(qCheck);
-                        if(rs.next())
+                        if(LoaiSachDAO.instance.isExist(txtTenSach.getText(),id))
                         {
                             sb.append("Loại sách này đã tồn tại");
                         }
@@ -135,20 +132,15 @@ public class frmLoaiSach extends JDialog {
                         {
                             JOptionPane.showMessageDialog(table1,sb.toString());
                         }
-                        else
-                        {
-                            String q = "UPDATE LOAISACH " +
-                                    "SET TEN = N'"+txtTenSach.getText()+"', MOTA = N'"+txtMoTa.getText()+"' " +
-                                    "WHERE LS_ID = "+id+"";
-                            int kq = DBConnect.getInstance().executeUpdate(q);
-                            if(kq>0)
-                            {
-                                JOptionPane.showMessageDialog(table1,"Sửa thành công");
+                        else {
+                            LoaiSach loaiSach = new LoaiSach(id, txtTenSach.getText(), txtMoTa.getText());
+                            int kq = LoaiSachDAO.instance.update(loaiSach);
+                            if (kq > 0) {
+                                JOptionPane.showMessageDialog(table1, "Sửa thành công");
                                 frmLoad();
                                 cleanData();
                             }
                         }
-
                     }
                 }
                 catch (Exception ex)
@@ -175,30 +167,21 @@ public class frmLoaiSach extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if(txtTenSach.getText().equals("")||txtMoTa.getText().equals(""))
-                    {
-                        JOptionPane.showMessageDialog(table1,"dữ liệu trống");
+                    int row = table1.getSelectedRow();
+                    if (row == -1) {
+                        JOptionPane.showMessageDialog(table1, "Chưa chọn dữ liệu cần xóa");
+                    }
+                    else if (JOptionPane.showConfirmDialog(table1, "Bạn có chắc chắn muốn xóa không?", "Xác nhận", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+                        return;
                     }
                     else
                     {
-                        StringBuffer sb = new StringBuffer();
-                        String qCheck = "select TEN from LOAISACH where TEN=N'"+txtTenSach.getText()+"'";
-                        ResultSet rs = DBConnect.getInstance().executeQuery(qCheck);
-                        if(!rs.next())
+                        int kq = LoaiSachDAO.instance.delete(id);
+                        if(kq>0)
                         {
-                            JOptionPane.showMessageDialog(table1,"Loại sách chưa tồn tại");
-                        }
-                        else
-                        {
-                            String q = "DELETE FROM LOAISACH " +
-                                    "WHERE LS_ID = "+id+"";
-                            int kq = DBConnect.getInstance().executeUpdate(q);
-                            if(kq>0)
-                            {
-                                JOptionPane.showMessageDialog(table1,"Xoá thành công");
-                                frmLoad();
-                                cleanData();
-                            }
+                            JOptionPane.showMessageDialog(table1,"Xoá thành công");
+                            frmLoad();
+                            cleanData();
                         }
 
                     }
