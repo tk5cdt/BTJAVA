@@ -1,6 +1,7 @@
 import com.sun.tools.javac.Main;
 
 import javax.swing.*;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -65,6 +66,12 @@ public class MainFrame {
                 mnuSach.setEnabled(false);
                 mnuDangXuat.setEnabled(false);
                 mnuDangNhap.setEnabled(true);
+            }
+        });
+        mnuThoat.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
             }
         });
         mnuLoaiSach.addActionListener(new ActionListener() {
