@@ -19,6 +19,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
 
+import static java.lang.Integer.parseInt;
+
 public class frmPhieuNhapSach extends JDialog {
     private JPanel contentPane;
     private JPanel panel1;
@@ -139,7 +141,7 @@ public class frmPhieuNhapSach extends JDialog {
                 btnXoa.setVisible(true);
                 int row = table1.getSelectedRow();
                 int column = table1.getSelectedColumn();
-                id = (int)table1.getModel().getValueAt(row,0);
+                id = parseInt(table1.getModel().getValueAt(row,0).toString());
                 chiTietPhieuNhap(id);
                 String day = table1.getModel().getValueAt(row,1).toString();
                 try
