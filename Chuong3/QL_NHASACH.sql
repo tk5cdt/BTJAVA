@@ -98,7 +98,8 @@ SELECT ROW_NUMBER() OVER (ORDER BY LS_ID) AS SoThuTu,
        LS_ID,
        TEN,
        MOTA
-FROM LOAISACH;
+FROM LOAISACH
+WHERE XOA = 0;
 go
 INSERT INTO NGUOIDUNG (TENDANGNHAP, MATKHAU, HOTEN, EMAIL, DIACHI, NGAYSINH, GIOITINH)
 VALUES
@@ -123,7 +124,8 @@ VALUES (N'2023-12-01', N'Nguyễn Văn A', N'Trần Thị B', N'Hóa đơn thanh
 
 INSERT INTO CHITIETHOADON (IDHOADON, IDSACH, SOLUONG, GIABAN)
 VALUES (1, 1, 2, 100.50),  -- Invoice 1, Book 2, Quantity 2, Price 100.50
-       (2, 2, 1, 200.25),  -- Invoice 2, Book 1, Quantity 1, Price 200.25
+       (2, 2, 1, 200.25),  -- Invoice 2, Book 2, Quantity 1, Price 200.25
+	   (2, 1, 1, 200.25),  -- Invoice 2, Book 1, Quantity 1, Price 200.25
        (3, 3, 3, 50.75);   -- Invoice 3, Book 3, Quantity 1, Price 50.75
 
 INSERT INTO PHIEUNHAPSACH (GHICHU, NGAY, NHANVIEN, XOA)

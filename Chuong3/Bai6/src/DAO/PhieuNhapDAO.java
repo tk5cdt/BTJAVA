@@ -13,7 +13,7 @@ public class PhieuNhapDAO {
     }
 
     public ResultSet getPhieuNhapTheoMa(String maPNS) throws SQLException {
-        String sql = "select TIEUDE, SOLUONG, DONGIA from SACH s join CHITIETPHIEUNHAPSACH ct on s.S_ID = ct.IDSACH and ct.CTPNS_ID ="+maPNS;
+        String sql = "select TIEUDE, SOLUONG, DONGIA from SACH s join CHITIETPHIEUNHAPSACH ct on s.S_ID = ct.IDSACH and ct.ID_PNS ="+maPNS;
         return DBConnect.getInstance().executeQuery(sql);
     }
 
