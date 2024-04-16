@@ -95,7 +95,7 @@ public class frmHoaDon extends JDialog {
             ResultSet rs = st.executeQuery(q);
             while (rs.next())
             {
-                //System.out.println("Tên sách: "+rs.getString("0")+"\nSố lượng: "+rs.getInt("SOLUONG")+"\nGía bán: "+rs.getFloat("GIABAN")+"");
+                setTitle("Chi tiết hoá đơn");
                 JOptionPane.showMessageDialog(table1,"Chi tiết hoá đơn:\nTên sách: "+rs.getString("TIEUDE")+"\nSố lượng: "+rs.getInt("SOLUONG")+"\nGía bán: "+rs.getFloat("GIABAN")+"");
             }
         } catch (SQLException e) {
@@ -159,19 +159,7 @@ public class frmHoaDon extends JDialog {
                 int idHD;
                 String q = "select HD_ID from HOADON where HD_ID = "+id+"";
                 Statement st = null;
-                try {
-                    st = conn.createStatement();
-                    ResultSet rs = st.executeQuery(q);
-//                    while (rs.next())
-//                    {
-//                        idHD = rs.getInt("HD_ID");
-//                        //chiTietHoaDon(idHD);
-//                    }
-                }
-                catch (SQLException ex)
-                {
-                    throw new RuntimeException(ex);
-                }
+
                 id = (int)table1.getModel().getValueAt(row,0);
                 chiTietHoaDon(id);
                 String day = table1.getModel().getValueAt(row,1).toString();
