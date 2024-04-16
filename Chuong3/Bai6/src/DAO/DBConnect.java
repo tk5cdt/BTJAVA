@@ -1,3 +1,5 @@
+package DAO;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -22,7 +24,7 @@ public class DBConnect {
     public DBConnect(){
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String connectionUrl = "jdbc:sqlserver://DESKTOP-KFOVQS4:1433;databaseName=QL_KHACHHANG;encrypt=true;trustServerCertificate=true;";
+            String connectionUrl = "jdbc:sqlserver://TRUONG:1433;databaseName=QL_NHASACH;encrypt=true;trustServerCertificate=true;";
             String username = "sa";
             String password = "123";
             con = DriverManager.getConnection(connectionUrl, username, password);
@@ -38,9 +40,7 @@ public class DBConnect {
             String connectionUrl = "jdbc:sqlserver://"+server+":"+port+";databaseName="+dbName+";;encrypt=true;trustServerCertificate=true;";
             con = DriverManager.getConnection(connectionUrl, username, password);
             System.out.println("Connect successfully");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
     }
@@ -57,7 +57,7 @@ public class DBConnect {
         }
     }
 
-    public ResultSet executeQuery(String sql){
+    public ResultSet executeQuery(String sql) throws SQLException {
         try {
             return con.createStatement().executeQuery(sql);
         } catch (SQLException e) {
@@ -65,9 +65,9 @@ public class DBConnect {
         }
     }
 
-    public void executeUpdate(String sql){
+    public int executeUpdate(String sql) throws SQLException {
         try {
-            con.createStatement().executeUpdate(sql);
+            return con.createStatement().executeUpdate(sql);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

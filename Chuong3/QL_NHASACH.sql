@@ -31,6 +31,7 @@ CREATE TABLE LOAISACH
 	LS_ID INT IDENTITY,
 	TEN NVARCHAR(100),
 	MOTA NVARCHAR(225),
+	XOA BIT DEFAULT 0,
 	CONSTRAINT PK_LOAISACH PRIMARY KEY (LS_ID)
 );
 go
@@ -42,7 +43,7 @@ CREATE TABLE SACH
 	NAMXUATBAN INT,
 	THELOAI INT,
 	MOTA NVARCHAR(225),
-	XOA BIT,
+	XOA BIT DEFAULT 0,
 	CONSTRAINT PK_SACH PRIMARY KEY (S_ID),
 	CONSTRAINT FK_SACH_THELOAI FOREIGN KEY (THELOAI) REFERENCES LOAISACH(LS_ID)
 );
@@ -54,7 +55,7 @@ CREATE TABLE HOADON
 	NHANVIEN NVARCHAR(225),
 	TENKHACHHANG NVARCHAR(225),
 	GHICHU NVARCHAR(225),
-	XOA bit,
+	XOA bit DEFAULT 0,
 	CONSTRAINT PK_HOADON PRIMARY KEY (HD_ID)
 );
 go
@@ -76,7 +77,7 @@ CREATE TABLE PHIEUNHAPSACH
 	GHICHU NVARCHAR(225),
 	NGAY DATE,
 	NHANVIEN NVARCHAR(225),
-	XOA bit,
+	XOA bit DEFAULT 0,
 	CONSTRAINT PK_PNS PRIMARY KEY (PNS_ID)
 );
 go
@@ -105,10 +106,10 @@ VALUES
 (N'add', N'11', N'Nguyễn Văn B', 'nguoiB@example.com', N'Đà Nẵng', '1995-02-15', N'Nữ'),
 (N'q', N'q', 'nguoiC@example.com', NULL, NULL, NULL, NULL);
 
-INSERT INTO LOAISACH (TEN, MOTA)
-VALUES (N'Tiểu thuyết', N'Thể loại văn học kể về một câu chuyện hư cấu, thường dài và có nhiều nhân vật.'),
-(N'Khoa học kỹ thuật', N'Cung cấp kiến thức và thông tin về các lĩnh vực khoa học và kỹ thuật.'),
-(N'Lịch sử', N'Ghi lại các sự kiện và diễn biến trong quá khứ.');
+INSERT INTO LOAISACH (TEN, MOTA, XOA)
+VALUES (N'Tiểu thuyết', N'Thể loại văn học kể về một câu chuyện hư cấu, thường dài và có nhiều nhân vật.', 0),
+(N'Khoa học kỹ thuật', N'Cung cấp kiến thức và thông tin về các lĩnh vực khoa học và kỹ thuật.', 0),
+(N'Lịch sử', N'Ghi lại các sự kiện và diễn biến trong quá khứ.', 0);
 
 INSERT INTO SACH (TIEUDE, TACGIA, NAMXUATBAN, THELOAI, MOTA, XOA)
 VALUES (N'Moby Dick', N'Herman Melville', 1851, 1, N'Tiểu thuyết kinh điển về hành trình săn bắt cá voi trắng.', 0),
