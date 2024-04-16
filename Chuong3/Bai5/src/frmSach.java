@@ -142,7 +142,7 @@ public class frmSach extends JDialog {
                 conn = cn.getConnection();
                 try {
                     if(txtTieuDe.getText().equals("") || txtMoTa.getText().equals("") || txtTacGia.getText().equals("") || txtNamXB.getText().equals(""))
-                        JOptionPane.showMessageDialog(btnThem,"Chưa nhập thông tin");
+                        JOptionPane.showMessageDialog(table1,"Chưa nhập thông tin");
                     else
                     {
                         StringBuffer sb = new StringBuffer();
@@ -151,7 +151,7 @@ public class frmSach extends JDialog {
                         ResultSet rs = st.executeQuery(qCheck);
                         if(rs.next())
                         {
-                            JOptionPane.showMessageDialog(btnThem,"Sách này đã tồn tại");
+                            JOptionPane.showMessageDialog(table1,"Sách này đã tồn tại");
                         }
                         else
                         {
@@ -233,24 +233,18 @@ public class frmSach extends JDialog {
                         String qCheck = "select TIEUDE from SACH where TIEUDE=N'"+txtTieuDe.getText()+"' and S_ID != "+id+" and XOA = 0";
                         Statement st = conn.createStatement();
                         ResultSet rs = st.executeQuery(qCheck);
-                        if(rs.next())
+
+                        String q = "UPDATE SACH " +
+                                "SET TIEUDE = N'"+txtTieuDe.getText()+"',TACGIA = N'"+txtTacGia.getText()+"',NAMXUATBAN = "+txtNamXB.getText()+",THELOAI = "+
+                                ((Theloai)cbbTheLoai.getSelectedItem()).getId()+", MOTA = N'"+txtMoTa.getText()+"' " +
+                                "WHERE S_ID = "+id+"";
+                        st = conn.createStatement();
+                        int kq = st.executeUpdate(q);
+                        if(kq>0)
                         {
-                            JOptionPane.showMessageDialog(btnThem,"Sách này đã tồn tại");
-                        }
-                        else
-                        {
-                            String q = "UPDATE SACH " +
-                                    "SET TIEUDE = N'"+txtTieuDe.getText()+"',TACGIA = N'"+txtTacGia.getText()+"',NAMXUATBAN = "+txtNamXB.getText()+",THELOAI = "+
-                                    ((Theloai)cbbTheLoai.getSelectedItem()).getId()+", MOTA = N'"+txtMoTa.getText()+"' " +
-                                    "WHERE S_ID = "+id+"";
-                            st = conn.createStatement();
-                            int kq = st.executeUpdate(q);
-                            if(kq>0)
-                            {
-                                JOptionPane.showMessageDialog(table1,"Sửa thành công");
-                                frmLoad();
-                                cleanData();
-                            }
+                            JOptionPane.showMessageDialog(table1,"Sửa thành công");
+                            frmLoad();
+                            cleanData();
                         }
                     }
                 }

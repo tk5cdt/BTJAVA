@@ -85,7 +85,7 @@ public class frmLoaiSach extends JDialog {
                 conn = cn.getConnection();
                 try {
                     if(txtTenSach.getText().equals("") || txtMoTa.getText().equals(""))
-                        JOptionPane.showMessageDialog(btnThem,"Chưa nhập thông tin");
+                        JOptionPane.showMessageDialog(table1,"Chưa nhập thông tin");
                     else
                     {
                         StringBuffer sb = new StringBuffer();
@@ -98,7 +98,7 @@ public class frmLoaiSach extends JDialog {
                         }
                         if(sb.length()>0)
                         {
-                            JOptionPane.showMessageDialog(btnThem,sb.toString());
+                            JOptionPane.showMessageDialog(table1,sb.toString());
                         }
                         else
                         {
@@ -131,7 +131,7 @@ public class frmLoaiSach extends JDialog {
                     else
                     {
                         StringBuffer sb = new StringBuffer();
-                        String qCheck = "select TEN from LOAISACH where TEN=N'"+txtTenSach.getText()+"'";
+                        String qCheck = "select TEN from LOAISACH where TEN=N'"+txtTenSach.getText()+"' and MOTA=N'"+txtMoTa.getText()+"'";
                         Statement st = conn.createStatement();
                         ResultSet rs = st.executeQuery(qCheck);
                         if(rs.next())
