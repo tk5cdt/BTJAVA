@@ -37,7 +37,7 @@ public class frmSach extends JDialog {
             Statement statement = null;
             ResultSet rs = null;
             statement = conn.createStatement();
-            String sql = "select S_ID,TIEUDE,TACGIA,NAMXUATBAN,ls.TEN,s.MOTA from SACH s join LOAISACH ls on s.THELOAI = ls.LS_ID and XOA = 0";
+            String sql = "select S_ID,TIEUDE,TACGIA,NAMXUATBAN,ls.TEN,s.MOTA from SACH s join LOAISACH ls on s.THELOAI = ls.LS_ID and s.XOA = 0";
             rs = statement.executeQuery(sql);
 
             // đọc dữ liệu

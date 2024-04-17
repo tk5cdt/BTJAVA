@@ -32,12 +32,12 @@ public class frmLoaiSach extends JDialog {
             Statement statement = null;
             ResultSet rs = null;
             statement = conn.createStatement();
-            String sql = "select * from LOAISACH";
+            String sql = "select * from LOAISACH where XOA = 0";
             rs = statement.executeQuery(sql);
 
             // đọc dữ liệu
             DefaultTableModel dtm = new DefaultTableModel();
-            dtm.addColumn("Mã sách");
+            dtm.addColumn("Mã thể loại");
             dtm.addColumn("Thể loại");
             dtm.addColumn("Mô tả");
             while (rs.next()) {
@@ -102,7 +102,7 @@ public class frmLoaiSach extends JDialog {
                         }
                         else
                         {
-                            String q = "insert into LOAISACH values (N'"+txtTenSach.getText()+"',N'"+txtMoTa.getText()+"')";
+                            String q = "insert into LOAISACH values (N'"+txtTenSach.getText()+"',N'"+txtMoTa.getText()+"',0)";
                             st = conn.createStatement();
                             int kq = st.executeUpdate(q);
                             if(kq>0)
@@ -199,7 +199,7 @@ public class frmLoaiSach extends JDialog {
                         }
                         else
                         {
-                            String q = "DELETE FROM LOAISACH " +
+                            String q = "UPDATE LOAISACH SET XOA=1" +
                                     "WHERE LS_ID = "+id+"";
                             st = conn.createStatement();
                             int kq = st.executeUpdate(q);
