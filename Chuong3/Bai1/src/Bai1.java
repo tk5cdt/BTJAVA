@@ -105,7 +105,7 @@ public class Bai1 {
     }
     public void loadData()
     {
-        new DBConnect("DESKTOP-KFOVQS4", "1433", "QL_KHACHHANG");
+        new DBConnect();
 
         try{
             String sql = "select makh, tenkh, namsinh from KHACHHANG";
@@ -132,7 +132,7 @@ public class Bai1 {
         PreparedStatement statement = null;
 
         try {
-            con = new DBConnect("DESKTOP-KFOVQS4", "1433", "QL_KHACHHANG").getConnection();
+            con = new DBConnect().getConnection();
             String sql = "DELETE FROM khachhang WHERE makh = ?";
             statement = con.prepareStatement(sql);
             statement.setString(1, makh);
@@ -166,7 +166,7 @@ public class Bai1 {
         txtMa.requestFocus();
     }
     public void addCustomer(String makh, String tenkh, int namsinh) {
-        con = new DBConnect("DESKTOP-KFOVQS4", "1433", "QL_KHACHHANG").getConnection();
+        con = new DBConnect().getConnection();
         String sql = "select count(*) from KHACHHANG where makh = ?";
         PreparedStatement statement = null;
         ResultSet resultSet;
@@ -216,7 +216,7 @@ public class Bai1 {
         PreparedStatement statement = null;
 
         try {
-            con = new DBConnect("DESKTOP-KFOVQS4", "1433", "QL_KHACHHANG").getConnection();
+            con = new DBConnect().getConnection();
             String sql = "UPDATE khachhang SET tenkh = ?, namsinh = ? WHERE makh = ?";
             statement = con.prepareStatement(sql);
 

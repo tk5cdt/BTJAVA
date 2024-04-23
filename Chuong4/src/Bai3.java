@@ -6,7 +6,7 @@ public class Bai3 {
 
     private static final int NUMBER_OF_ACCOUNTS = 10;
     private static final int NUMBER_OF_THREADS = 10;
-    private static final int NUMBER_OF_TRANSFERS = 1000;
+    private static final int NUMBER_OF_TRANSFERS = 5;
 
     private static Account[] accounts;
     private static ExecutorService executorService;
@@ -50,7 +50,7 @@ public class Bai3 {
                             account2.deposit(amount);
 
                             // Hiển thị thông tin giao dịch
-                            System.out.println("Giao dịch #" + (finalI + 1) + ":"); // Use finalI for transaction number
+                            //System.out.println("Giao dịch #" + (finalI + 1) + ":"); // Use finalI for transaction number
                             System.out.println("Tên luồng: " + Thread.currentThread().getName());
                             System.out.println("Số tiền chuyển: " + amount);
                             System.out.println("Chuyển từ: TK" + account1.getId());
@@ -75,6 +75,8 @@ public class Bai3 {
         // Hiển thị số dư của các tài khoản sau khi chuyển khoản
         System.out.println("Số dư các tài khoản sau khi chuyển khoản:");
         printAccountBalances();
+
+
     }
 
     private static void printAccountBalances() {
@@ -82,6 +84,7 @@ public class Bai3 {
             System.out.println("TK" + accounts[i].getId() + ": " + accounts[i].getBalance());
         }
     }
+
 }
 
 class Account {
