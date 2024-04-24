@@ -21,11 +21,11 @@ public class Bai4 {
     DefaultTableModel tableModel = new DefaultTableModel();
 
     private static final int NUMBER_OF_ACCOUNTS = 10;
-    private static final int NUMBER_OF_TRANSFERS = 100;
+    private static final int NUMBER_OF_TRANSFERS = 1000;
 
     private static Account[] accounts;
     private ScheduledExecutorService scheduledExecutorService;
-
+    double balance;
     private int transferCount = 0;
     public Bai4() {
         // Khởi tạo JTable và JScrollPane
@@ -33,7 +33,7 @@ public class Bai4 {
         tableModel.addColumn("Số tiền chuyển");
         tableModel.addColumn("Chuyển từ tài khoản");
         tableModel.addColumn("Chuyển tới tài khoản");
-        tableModel.addColumn("Tổng tiền trong ngân hàng");
+        tableModel.addColumn("Tổng tiền trong 2 tài khoản");
 
         table1 = new JTable(tableModel);
         scrollPane.setViewportView(table1);
@@ -67,6 +67,8 @@ public class Bai4 {
         accounts = new Account[NUMBER_OF_ACCOUNTS];
         for (int i = 0; i < NUMBER_OF_ACCOUNTS; i++) {
             accounts[i] = new Account(i + 1, 1000.00);
+            balance += accounts[i].getBalance();
+
         }
         scheduledExecutorService = Executors.newScheduledThreadPool(10);
         scheduledExecutorService.scheduleAtFixedRate(() -> {
