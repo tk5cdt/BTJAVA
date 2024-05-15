@@ -115,6 +115,7 @@ public class frmSach extends JDialog {
     public frmSach() {
         setContentPane(contentPane);
         setModal(true);
+        setTitle("Sách");
         getRootPane().setDefaultButton(buttonOK);
 
         // call onCancel() when cross is clicked

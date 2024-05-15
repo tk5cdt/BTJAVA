@@ -43,6 +43,7 @@ public class frmDangNhap extends JDialog {
     public frmDangNhap() {
         setContentPane(contentPane);
         setModal(true);
+        setTitle("Đăng nhập");
         getRootPane().setDefaultButton(btnDangNhap);
 
         btnDangNhap.addActionListener(new ActionListener() {

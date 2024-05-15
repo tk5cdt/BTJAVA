@@ -28,6 +28,7 @@ public class frmPhieuNhapSach extends JDialog {
     private JButton btnThoat;
     private JButton buttonOK;
     private int id;
+    private String tenNV;
 
     JDateChooser dateChooser = new JDateChooser();
 
@@ -87,19 +88,22 @@ public class frmPhieuNhapSach extends JDialog {
         try {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(q);
+            StringBuffer sb = new StringBuffer();
             while (rs.next())
             {
-                //System.out.println("Tên sách: "+rs.getString("0")+"\nSố lượng: "+rs.getInt("SOLUONG")+"\nGía bán: "+rs.getFloat("GIABAN")+"");
-                JOptionPane.showMessageDialog(table1,"Chi tiết phiếu nhập sách:\nTên sách: "+rs.getString("TIEUDE")+"\nSố lượng: "+rs.getInt("SOLUONG")+"\nĐơn giá: "+rs.getFloat("DONGIA")+"");
+                sb.append("Tên sách: "+rs.getString("TIEUDE")+"\nSố lượng: "+rs.getInt("SOLUONG")+"\nGiá nhập: "+rs.getInt("DONGIA")+"\n\n");
             }
+            JOptionPane.showMessageDialog(table1,sb.toString(), "Chi tiết phiếu nhập", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public frmPhieuNhapSach() {
+    public frmPhieuNhapSach(String tenNV) {
         dateChooser.setDateFormatString("dd-MM-yyyy");
         JNgay.add(dateChooser);
+        setTitle("Phiếu nhập sách");
+        txtNhanVien.setText(tenNV);
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -227,7 +231,7 @@ public class frmPhieuNhapSach extends JDialog {
     }
 
     public static void main(String[] args) {
-        frmPhieuNhapSach dialog = new frmPhieuNhapSach();
+        frmPhieuNhapSach dialog = new frmPhieuNhapSach("");
         dialog.setLocationRelativeTo(null);
         dialog.pack();
         dialog.setVisible(true);

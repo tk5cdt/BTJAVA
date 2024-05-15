@@ -58,6 +58,7 @@ public class frmLoaiSach extends JDialog {
     public frmLoaiSach() {
         setContentPane(contentPane);
         setModal(true);
+        setTitle("Loại sách");
         getRootPane().setDefaultButton(buttonOK);
 
         // call onCancel() when cross is clicked

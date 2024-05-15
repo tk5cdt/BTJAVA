@@ -93,11 +93,12 @@ public class frmHoaDon extends JDialog {
         try {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(q);
+            StringBuffer sb = new StringBuffer();
             while (rs.next())
             {
-                setTitle("Chi tiết hoá đơn");
-                JOptionPane.showMessageDialog(table1,"Chi tiết hoá đơn:\nTên sách: "+rs.getString("TIEUDE")+"\nSố lượng: "+rs.getInt("SOLUONG")+"\nGía bán: "+rs.getFloat("GIABAN")+"");
+                sb.append("Tên sách: "+rs.getString("TIEUDE")+"\nSố lượng: "+rs.getInt("SOLUONG")+"\nGía bán: "+rs.getFloat("GIABAN")+"\n\n");
             }
+            JOptionPane.showMessageDialog(table1,sb.toString(), "Chi tiết hoá đơn", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -106,6 +107,7 @@ public class frmHoaDon extends JDialog {
     public frmHoaDon(String tenNV) {
         setContentPane(contentPane);
         setModal(true);
+        setTitle("Hoá đơn");
         getRootPane().setDefaultButton(buttonOK);
 
         dateChooser.setDateFormatString("dd-MM-yyyy");

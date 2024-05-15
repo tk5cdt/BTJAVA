@@ -33,8 +33,6 @@ public class MainFrame {
         frmDangNhap frmDN = new frmDangNhap();
         frmLoaiSach frmLS = new frmLoaiSach();
         frmSach frmS = new frmSach();
-        frmPhieuNhapSach frmPNS = new frmPhieuNhapSach();
-        frmPNS.pack();
         frmDN.pack();
         frmLS.pack();
         frmS.pack();
@@ -100,6 +98,8 @@ public class MainFrame {
         mnuPhieuNhapSach.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                frmPhieuNhapSach frmPNS = new frmPhieuNhapSach(tenNV);
+                frmPNS.pack();
                 frmPNS.setLocationRelativeTo(null);
                 frmPNS.setVisible(true);
             }
